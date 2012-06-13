@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : loadingTestScreen.xml
+    Created on : March 27, 2012, 3:57 PM
+    Author     : Viorel Iliescu
+    Description:
+        Purpose of the document follows.
+-->
+
+<nifty  xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" 
+        xmlns:xsi="http://www.w3.org/2001/XML-Schema-instance"
+        xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd 
+        http://nifty-gui.sourceforge.net/nifty.xsd">
+            
+    <useStyles filename="nifty-default-styles.xml" />
+    <useControls filename="nifty-default-controls.xml" />
+ 
+    <!-- this is our nifty little progressbar control -->
+    <!--<controlDefinition name="progressbar" controller="projectStark.LOADING">        
+    <image filename="Interface/loadingBorder.png" childLayout="absolute" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">
+            <image id="progressbar" x="0" y="0" filename="Interface/loadingInner.png" width="32px" height="100%"
+                   imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15" />
+        </image>
+    </controlDefinition>-->
+    <controlDefinition name="progressbar" controller="projectStark.LOADING">
+        <panel backgroundColor="#f00f" />
+    </controlDefinition>
+    
+ 
+    <screen id="start" controller = "projectStark.LOADING">
+        <layer id="layer" childLayout="center">
+            <panel id = "panel2" height="30%" width="50%" align="center" valign="center" childLayout="vertical">
+                <control name="button" label="Start" id="StartButton" align="center" valign="center" visibleToMouse="true" >
+                    <interact onClick="showLoadingMenu(loadlevel)" />
+                </control>
+            </panel>
+        </layer>
+    </screen>
+ 
+    <!--<screen id="loadlevel" controller = "projectStark.LOADING">
+        <layer id="loadinglayer" childLayout="center" backgroundColor="#000000">
+            <panel id = "loadingpanel" childLayout="vertical" align="center" valign="center" height="32px" width="70%">
+                <control name="loadingbar" align="center" valign="center" width="100%" height="100%" />
+                <control id="loadingtext" name="label" align="center" 
+                         text="                                                  "/>
+            </panel>
+        </layer>
+    </screen>-->
+    <screen id="loadlevel" controller = "projectStark.LOADING">
+    <layer id="layer" childLayout="center">
+        <control name="progressbar" align="center" valign="center" width="400px" height="32px" />
+        </layer>
+    </screen>
+ 
+    <screen id="end" controller = "projectStark.LOADING">
+    </screen>
+ 
+</nifty>
