@@ -1,20 +1,31 @@
 package ship.types;
 
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
+import com.jme3.export.Savable;
+import com.jme3.math.Vector3f;
+import java.io.IOException;
 import ship.sections.ShipHull;
 import ship.sections.ShipEngine;
 import ship.sections.ShipBridge;
 import ship.modules.Module1Turret;
 import ship.modules.Module4Reactor;
 import com.jme3.scene.Node;
+import java.io.Serializable;
 
 /*      
  *      @author Viorel Iliescu      *
                                     */
 // TODO This is temp for fiddling with stuff!! before impliment the Types of Shipz as later!
-public class Ship {
-    int owner               = 0; //<- who owns this ship? maby an enum and have player, enemy, neutral, empty?
+// this should actuly be abstract and based on the hull size the preffered ship type is created 
+// which should allso house the controlls of that spacific ship!
+// TODO - should this implement saveable! or serializable!?!?!
+public class Ship implements Savable {
+    int owner               = 0; //<- who owns this ship? maby an enum and have empty 0, player 1, neutral 2,enemy 3,  ?
+    int shipID              = 0; // Used incase player has more then 1 ship?
     boolean shipSelected    = false;
     
+    private Vector3f shipHeading        = new Vector3f();
     private Node shipNode               = new Node("noShip");
     
     private ShipBridge shipBridge       = null;
@@ -110,6 +121,16 @@ public class Ship {
     public void setShipSelected(boolean shipSelected) {
         this.shipSelected = shipSelected;
     }
+
+    public int getShipID() {
+        return shipID;
+    }
+
+    public void setShipID(int shipID) {
+        this.shipID = shipID;
+    }
+    
+    
     
     public void clearShipDesign() {
         this.shipNode.detachAllChildren();
@@ -125,4 +146,36 @@ public class Ship {
         this.shipTurret2 = null;
         this.shipTurret3 = null;
     }
+
+    public void write(JmeExporter ex) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void read(JmeImporter im) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    private void faceShipAt(Vector3f direction) {
+        // TODO: add limits such as rotation speed, turn to rotate? etc or something
+        shipNode.lookAt(direction, Vector3f.UNIT_Y);
+    }
+    
+    public void moveShipTo(Vector3f location) {
+        // TODO: add other stuff here?
+        int y = 0;
+        float x = location.x;
+        float z = location.z;
+        faceShipAt(location);
+        shipNode.move(x, y, z);
+    }
+
+    public Vector3f getShipHeading() {
+        return shipHeading;
+    }
+
+    public void setShipHeading(Vector3f shipHeading) {
+        this.shipHeading = shipHeading;
+    }
+    
+    
 }

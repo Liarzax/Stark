@@ -36,12 +36,12 @@ public final class ShipHull extends ShipSection {
         this.setSectionType(2);
         
         // Create the Hull based on the type sent in
-        this.createHull(assetManager, nodeToAttachSectionTo, shipOwner.getHullCatagory(), shipOwner.getHullType());
+        this.assignHullStats(assetManager, nodeToAttachSectionTo, shipOwner.getHullCatagory(), shipOwner.getHullType());
     }
     
     public void setBlankHullType(AssetManager assetManager, Node nodeToAttachSectionTo, Entity shipOwner) {
         this.setSectionType(2);
-        this.createHull(assetManager, nodeToAttachSectionTo, 1, 0);
+        this.assignHullStats(assetManager, nodeToAttachSectionTo, 1, 0);
     }
     
     public Node getHullNode() {
@@ -68,7 +68,7 @@ public final class ShipHull extends ShipSection {
         return reactorPosition;
     }
     
-    protected void createHull(AssetManager assetManager, Node Ship, int hullCatagory, int type) {
+    protected void assignHullStats(AssetManager assetManager, Node Ship, int hullCatagory, int type) {
         //TODO HAve like a hull catagory, Fighter, Destroyer, Carrier, BattleShip, MotherShip, OrbitalStation! then in each, have switch on type
         switch (hullCatagory) {
             // Drone/Fighter Class Ships
@@ -76,15 +76,15 @@ public final class ShipHull extends ShipSection {
                 switch (type) {
 
                     case 0:
-                        Cat1Type0(assetManager, Ship);
+                        setCat1Type0Stats(assetManager, Ship);
                         break;
 
                     case 1:
-                        Cat1Type1(assetManager, Ship);
+                        setCat1Type1Stats(assetManager, Ship);
                         break;
 
                     default:
-                        Cat1TypeError(assetManager, Ship);
+                        setCat1TypeErrorStats(assetManager, Ship);
                         break;
 
                 }
@@ -120,7 +120,7 @@ public final class ShipHull extends ShipSection {
         }
     }
     
-    private void Cat1TypeError(AssetManager assetManager, Node Ship) {
+    private void setCat1TypeErrorStats(AssetManager assetManager, Node Ship) {
         this.setSectionName("Hectic Errorz Hull");
         this.setSectionDesc("This hull is either for Debugging or an Error has occured during Hull creation...");
         
@@ -144,7 +144,7 @@ public final class ShipHull extends ShipSection {
         
     }   
     
-    private void Cat1Type0(AssetManager assetManager, Node Ship) {
+    private void setCat1Type0Stats(AssetManager assetManager, Node Ship) {
         this.setSectionName("Testing Hull");
         this.setSectionDesc("This hull is used during Testing & Debugging...");
         
@@ -163,6 +163,9 @@ public final class ShipHull extends ShipSection {
             Logger.getLogger(ShipHull.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
+            // TODO: make a check here to see if there is a database created, if not create one!
+            //mySQL.createTableShipSectionHullInDB();
+            // TODO: make it look for the actual hull catagory, then section type, then load stats
             mySQL.readHullFromDB();
         } catch (SQLException ex) {
             Logger.getLogger(ShipHull.class.getName()).log(Level.SEVERE, null, ex);
@@ -181,7 +184,7 @@ public final class ShipHull extends ShipSection {
         Ship.attachChild(hullNode);
     }   
     
-    private void Cat1Type1(AssetManager assetManager, Node Ship) {
+    private void setCat1Type1Stats(AssetManager assetManager, Node Ship) {
         this.setSectionName("Light Hull");
         this.setSectionDesc("This is a Light Testing hull...");
         

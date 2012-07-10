@@ -85,8 +85,6 @@ public class ScreenMultiplayer extends AbstractAppState implements ScreenControl
     }
     
     public void backButton() {
-        //TODO go back to the start screen
-        //nifty.fromXml("Interface/screenStart.xml", "screenStart", new ScreenHUD("screenStart"));
         nifty.addXml("Interface/screenStart.xml");
         System.out.println("Going Back!");
         nifty.gotoScreen("screenStart");

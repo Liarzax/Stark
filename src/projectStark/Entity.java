@@ -1,6 +1,9 @@
 package projectStark;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
+import java.io.IOException;
 import ship.sections.ShipHull;
 import ship.sections.ShipEngine;
 import ship.sections.ShipBridge;
@@ -8,18 +11,23 @@ import ship.modules.Module1Turret;
 import ship.modules.Module4Reactor;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.collision.CollisionResults;
+import com.jme3.export.InputCapsule;
+import com.jme3.export.OutputCapsule;
+import com.jme3.export.Savable;
+import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import java.io.Serializable;
 import ship.types.Ship;
-import ship.types.ShipT2Corvette;
 
 /*      
  *      @author Viorel Iliescu      *
                                     */
 
 //TODO 1 - NEED TO REDO THIS WHOLE CLASS!
-public class Entity { //TODO 1 - that controller stuff!! i need to use in here!
+// TODO - SHould thisd impliment serializable, or saveable!!
+public class Entity implements Savable { //TODO 1 - that controller stuff!! i need to use in here!
     
     // Ship
     private Ship ship = null;
@@ -35,6 +43,8 @@ public class Entity { //TODO 1 - that controller stuff!! i need to use in here!
     private int currentHealth   = 0;
     private int maxShieldCap    = 0;
     private int currentShieldS  = 0;
+    private int reactorCurStrengh   = 0;
+    private int reactorMaxStrengh   = 0;
     // Turrets
     private Module1Turret shipTurret    = null;
     private Module1Turret shipTurret2   = null;
@@ -44,7 +54,12 @@ public class Entity { //TODO 1 - that controller stuff!! i need to use in here!
     private Module1Turret shipTurret6   = null;
     private Module1Turret shipTurret7   = null;
     
-    public Entity() {
+    // EXAMPLE STUFF FOR SAVEABLE
+    private int      someIntValue;   // some custom user data
+    private float    someFloatValue; // some custom user data
+    //private Material someJmeObject;  // some custom user data
+    
+    public Entity(int owner, int shipID) {
         //TODO impliment the size of the ships per hull
         // hullCatagory is the size of the Ship, 
         // Hull Catagory 0 = N/A, 1 = fighter, 2 = small, 3 = med, 4 = large, 5 = huge!
@@ -60,17 +75,24 @@ public class Entity { //TODO 1 - that controller stuff!! i need to use in here!
         increaseCurrentHealth(100);
         increaseMaxShieldCap(100);
         increaseCurrentShieldS(100);
+        incReactorMaxStrengh(100);
+        incReactorCurStrengh(50);
         
         ship = new Ship();
+        ship.setOwner(owner);
+        ship.setShipID(shipID);
     }
     
     //TODO: Make player saveable
     
     void entityUpdate() {
-     
         // TODO THE CONTROLL teacher taught us, DO IT!
         // UPDATE logical stuff in here?? like... somethign i havent thought of yet?
         // maby stuff like, check shields? or RECHARGE SHIELDS! and like, BASED ON REACTOR START MAKING POWER AGAIN, ETC!!!! AWSOME!
+        // TODO: SHOULDENT THIS STUFF BE SHIP SPECIFIC!!! AND BE IN THE SHIP CLASSS!?!?!?
+        if (this.getReactorCurStrengh() < this.getReactorMaxStrengh()) {
+            this.incReactorCurStrengh(1);
+        }
     }
     
     public int getHullCatagory() {
@@ -230,7 +252,62 @@ public class Entity { //TODO 1 - that controller stuff!! i need to use in here!
     public void setShip(Ship ship) {
         this.ship = ship;
     }
+
+    public void write(JmeExporter ex) throws IOException {
+        //throw new UnsupportedOperationException("Not supported yet.");
+        OutputCapsule capsule = ex.getCapsule(this);
+        capsule.write(someIntValue,   "someIntValue",   1);
+        capsule.write(someFloatValue, "someFloatValue", 0f);
+        //capsule.write(someJmeObject,  "someJmeObject",  new Material());
+        
+    }
+
+    public void read(JmeImporter im) throws IOException {
+        //throw new UnsupportedOperationException("Not supported yet.");
+        InputCapsule capsule = im.getCapsule(this);
+        someIntValue   = capsule.readInt(    "someIntValue",   1);
+        someFloatValue = capsule.readFloat(  "someFloatValue", 0f);
+        //someJmeObject  = capsule.readSavable("someJmeObject",  new Material());
+    }
+
+    public int getReactorCurStrengh() {
+        return reactorCurStrengh;
+    }
+
+    public void setReactorCurStrengh(int reactorCurStrenghTo) {
+        this.reactorCurStrengh = reactorCurStrenghTo;
+    }
+
+    public int getReactorMaxStrengh() {
+        return reactorMaxStrengh;
+    }
+
+    public void setReactorMaxStrengh(int reactorMaxStrenghTo) {
+        this.reactorMaxStrengh = reactorMaxStrenghTo;
+    }
     
+    public void incReactorMaxStrengh(int incReactorMaxStrenghBy) {
+        this.reactorMaxStrengh += incReactorMaxStrenghBy;
+    }
     
+    public void decReactorMaxStrengh(int decReactorMaxStrenghBy) {
+        this.reactorMaxStrengh -= decReactorMaxStrenghBy;
+    }
     
+    public void incReactorCurStrengh(int incReactorCurStrenghBy) {
+        this.reactorCurStrengh += incReactorCurStrenghBy;
+        
+        if (this.reactorCurStrengh >= this.reactorMaxStrengh) {
+            this.reactorCurStrengh = this.reactorMaxStrengh;
+        }
+    }
+    
+    public void decReactorCurStrengh(int decReactorCurStrenghBy) {
+        this.reactorCurStrengh -= decReactorCurStrenghBy;
+        
+        if (this.reactorCurStrengh <= 0) {
+            this.reactorCurStrengh = 0;
+            //TODO run the reactor overload function or something.
+        }
+    }
 }

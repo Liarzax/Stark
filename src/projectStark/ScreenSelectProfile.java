@@ -1,5 +1,9 @@
 package projectStark;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import networking.local.NetworkMessage;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -14,6 +18,8 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
 /*      
  *      @author Viorel Iliescu          *
@@ -25,6 +31,9 @@ public class ScreenSelectProfile extends AbstractAppState implements ScreenContr
     private Nifty nifty;
     private Screen screen;
     private SimpleApplication App;
+    
+    // 0 = no profile, then 1, 2, 3, 4
+    private int currentProfile = 0;
     
     //TODO More functionality to this select profile screen
     ScreenSelectProfile(String string, ActionListener aThis) {
@@ -64,10 +73,35 @@ public class ScreenSelectProfile extends AbstractAppState implements ScreenContr
     }
 
     public void newButton() {
-        // find old text
-        //Element niftElement = nifty.getCurrentScreen().findElementByName("text");
-        //replace old text with new text
-        //niftElement.getRenderer(TextRenderer.class).setText("UP!");
+        // if profile is empty, create new profile
+        //else if profile is not empty, display confirm create, then create
+        
+        // temp using this as a save class
+        FileOutputStream outStream = null;
+        ObjectOutputStream objectOutputFile = null;
+        
+        try {
+            outStream = new FileOutputStream("savedProfile.dat");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ScreenSelectProfile.class.getName()).log(Level.SEVERE, null, ex);
+            // TODO: cant write file error handling!
+        }
+        
+        try {
+            objectOutputFile = new ObjectOutputStream(outStream);
+        } catch (IOException ex) {
+            Logger.getLogger(ScreenSelectProfile.class.getName()).log(Level.SEVERE, null, ex);
+            // error again?
+        }
+        
+        //test player
+        Entity tester = new Entity(0, 0);
+        try {
+            objectOutputFile.writeObject(tester);
+        } catch (IOException ex) {
+            Logger.getLogger(ScreenSelectProfile.class.getName()).log(Level.SEVERE, null, ex);
+            // error cant write stuff handling
+        }
         
         System.out.println("Create New Profile!");
     }
@@ -86,6 +120,36 @@ public class ScreenSelectProfile extends AbstractAppState implements ScreenContr
         System.out.println("Going Back!");
         nifty.gotoScreen("screenStart");
     }
+    
+    public void selectProfile(int profile) {
+        currentProfile = profile;
+        
+        System.out.println("Profile "+currentProfile+" Selected!");
+    }
+    
+    /*public void selectProfile1() {
+        currentProfile = 1;
+        
+        System.out.println("Profile "+currentProfile+" Selected!");
+    } 
+    
+    public void selectProfile2() {
+        currentProfile = 2;
+        
+        System.out.println("Profile "+currentProfile+" Selected!");
+    } 
+    
+    public void selectProfile3() {
+        currentProfile = 3;
+        
+        System.out.println("Profile "+currentProfile+" Selected!");
+    } 
+    
+    public void selectProfile4() {
+        currentProfile = 4;
+        
+        System.out.println("Profile "+currentProfile+" Selected!");
+    } */
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {

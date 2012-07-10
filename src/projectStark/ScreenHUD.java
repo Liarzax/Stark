@@ -5,8 +5,11 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+
 
 /*      
  *      @author Viorel Iliescu      *
@@ -17,6 +20,9 @@ public class ScreenHUD extends AbstractAppState implements ScreenController {
     private Nifty nifty;
     private Screen screen;
     private SimpleApplication App;
+    
+    // Debug Puropuses to test Score inc/dec
+    private int score = 0;
     
     public ScreenHUD(String data, SimpleApplication OrigApp) {
         App = OrigApp;
@@ -71,4 +77,24 @@ public class ScreenHUD extends AbstractAppState implements ScreenController {
     public void testButton(){
         System.out.println("HUD Button Test");
     }
+    
+    public void incButton(){
+        System.out.println("Debug Increase Score + 10");
+        incScore(10);
+        Element niftElement = nifty.getCurrentScreen().findElementByName("score");
+        niftElement.getRenderer(TextRenderer.class).setText("Score "+score);
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void incScore(int incAmount) {
+        this.score += incAmount;
+    }
+    
+    public void decScore(int decAmount) {
+        this.score -= decAmount;
+    }
+    
 }

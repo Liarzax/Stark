@@ -16,10 +16,10 @@ public class ScreenStart extends AbstractAppState implements ScreenController {
     
     private Nifty nifty;
     private Screen screen;
-    private SimpleApplication App;
+    private SimpleApplication app;
     
-    public ScreenStart(String data, SimpleApplication OrigApp) {
-        App = OrigApp;
+    public ScreenStart(String data, SimpleApplication origApp) {
+        app = origApp;
     }
     
     public void bind(Nifty nifty, Screen screen) {
@@ -39,9 +39,12 @@ public class ScreenStart extends AbstractAppState implements ScreenController {
     public void startGame() {
         //TODO This needs to call the seperate screen not form same screen! xml
         //nifty.fromXml("Interface/screenSelectProfile.xml", "screenSelectProfile", new ScreenSelectProfile("screenSelectProfile", App));
-        nifty.addXml("Interface/screenSelectProfile.xml");
+        //nifty.addXml("Interface/screenSelectProfile.xml");
         System.out.println("Going to Profile Selection!");
-        nifty.gotoScreen("screenSelectProfile");
+        //nifty.gotoScreen("screenSelectProfile");
+        // Temp deactivate profile selection, screen buttons not working.
+        nifty.addXml("Interface/screenHUD.xml");
+        nifty.gotoScreen("screenHUD");
     }
     
     public void goToMLobby() {
@@ -53,7 +56,7 @@ public class ScreenStart extends AbstractAppState implements ScreenController {
     }
     
     public void quitGame() {
-        App.stop();
+        app.stop();
     }
     
     @Override

@@ -23,15 +23,11 @@ import ship.sections.ShipHull;
 public class MySQLAccess {
     private Connection connection   = null;
     private Statement statement     = null;
-    private ResultSet result = null; 
+    private ResultSet result        = null; 
     
     private String url      = "jdbc:mysql://localhost:3306/starktest";
     private String userName = "root";
     private String password = "";
-    
-    // Notes:
-    //private String url = "jdbc:mysql://localhost:3306/DBName";
-    //private  = null;
 
     public MySQLAccess() {
 
@@ -101,41 +97,8 @@ public class MySQLAccess {
         }
 
     }
-
-    public void readEntityFromDB() throws SQLException {
-
-        try {
-            // Create a new Statement
-            try {
-                statement = connection.createStatement();
-            } 
-            catch (SQLException ex) {
-                Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Read Entity From Database!
-            // TODO: 1 - NEED TO DO THIS PART!
-            try {
-                statement.executeUpdate("CREATE TABLE pet (name VARCHAR(20), owner VARCHAR(20), species VARCHAR(20), sex CHAR(1), birth DATE, death DATE)");
-                System.out.println("Statement Sent!");
-            } 
-            catch (SQLException ex) {
-                Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } 
-        catch (Exception ex) {
-            connection.rollback();
-            System.out.println("Failed to Send Anything!");
-            Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        finally {
-            close();
-        }
-
-    }
-
-    public void writeEntityToDB(Entity entity) throws SQLException {
-
+    
+    public void createTableShipSectionHullInDB() throws SQLException {
         try {
             // Create a new Statement
             // TODO: 1 - THIS GOES HAND IN HAND WITH READENTITYFROMDB
@@ -148,16 +111,18 @@ public class MySQLAccess {
 
             // Create a new Table in the Database called Entity, with the following columns!
             try {
-                statement.executeUpdate("CREATE TABLE entity (name VARCHAR(20), owner VARCHAR(20), species VARCHAR(20), sex CHAR(1), birth DATE, death DATE)");
-                System.out.println("Statement Sent!");
+                statement.executeUpdate("CREATE TABLE shiphullsection (hullCatagory INT(4), sectionType INT(4), "
+                        + "sectionName VARCHAR(40), sectionDesc VARCHAR(255), moduleSlotsOffensive INT(4), moduleSlotsDefensive INT(4), "
+                        + "moduleSlotsSupport INT(4), moduleSlotsCritical INT(4), moduleSlotsTotal INT(4), sectionWeight INT(4),"
+                        + "healthBoost INT(4), armourBoost INT(4))");
             } 
             catch (SQLException ex) {
                 Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, null, ex);
             }
         } 
         catch (Exception ex) {
-            connection.rollback();
             System.out.println("Failed to Write Anything!");
+            connection.rollback();
             Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, null, ex);
         } 
         finally {
@@ -182,7 +147,8 @@ public class MySQLAccess {
                         connection = null;
                 }
                 
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) {
             Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
