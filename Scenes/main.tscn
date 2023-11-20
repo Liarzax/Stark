@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://c57c7pqrpv7v"]
+
+[ext_resource type="Script" path="res://Scripts/btnHull01.gd" id="1_2oeu6"]
+[ext_resource type="Script" path="res://Scripts/btnEngine01.gd" id="1_42w3c"]
+[ext_resource type="PackedScene" uid="uid://iget1ttoce0u" path="res://module_01.tscn" id="1_ok64s"]
+[ext_resource type="Script" path="res://Scripts/btnEngine12.gd" id="3_bm1dv"]
+
+[node name="Main" type="Node2D"]
+
+[node name="UI" type="CanvasGroup" parent="."]
+position = Vector2(563, 239)
+
+[node name="ButtonsPanel" type="Panel" parent="UI"]
+offset_left = -546.0
+offset_top = -229.0
+offset_right = -363.0
+offset_bottom = 396.0
+
+[node name="btnHull01" type="Button" parent="UI/ButtonsPanel"]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 15.0
+offset_right = 159.0
+offset_bottom = 50.0
+text = "Hull"
+script = ExtResource("1_2oeu6")
+
+[node name="btnEngine11" type="Button" parent="UI/ButtonsPanel"]
+offset_left = 19.0
+offset_top = 54.0
+offset_right = 159.0
+offset_bottom = 89.0
+text = "Engine"
+script = ExtResource("1_42w3c")
+
+[node name="btnEngine12" type="Button" parent="UI/ButtonsPanel"]
+offset_left = 19.0
+offset_top = 95.0
+offset_right = 159.0
+offset_bottom = 130.0
+text = "Engine Alt"
+script = ExtResource("3_bm1dv")
+
+[node name="module_01" parent="." instance=ExtResource("1_ok64s")]
+position = Vector2(575, 220)
